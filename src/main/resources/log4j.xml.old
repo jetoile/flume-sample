@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
+                     debug="false">
+
+    <!-- CONSOLE APPENDER -->
+    <appender name="FILE" class="org.apache.log4j.net.SyslogAppender">
+    <!--<appender name="FILE" class="org.apache.log4j.ConsoleAppender">-->
+        <!--<layout class="org.apache.log4j.PatternLayout">-->
+            <!--<param name="ConversionPattern" value="%m%n" />-->
+        <!--</layout>-->
+        <param name="Facility" value="user" />
+        <param name="SyslogHost" value="ubuntu-client:20001" />
+        <!--  		<param name="SyslogHost" value="localhost:5002" />-->
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+
+    <!-- SYSLOG FILE APPENDER -->
+    <appender name="INJECTOR" class="org.apache.log4j.net.SyslogAppender">
+        <param name="SyslogHost" value="ubuntu-client:20001" />
+        <!--  		<param name="SyslogHost" value="localhost:5002" />-->
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+
+    <root>
+        <appender-ref ref="FILE" />
+        <appender-ref ref="INJECTOR" />
+    </root>
+
+</log4j:configuration>

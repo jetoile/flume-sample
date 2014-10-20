@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE log4j:configuration SYSTEM "log4j.dtd">
+<log4j:configuration xmlns:log4j="http://jakarta.apache.org/log4j/"
+                     debug="false">
+
+    <!-- CONSOLE APPENDER -->
+    <appender name="FILE" class="org.apache.flume.clients.log4jappender.Log4jAppender">
+        <param name="Port" value="20001" />
+        <!--<param name="Hostname" value="ubuntu-client" />-->
+        <param name="Hostname" value="localhost" />
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+
+
+
+    <!-- SYSLOG FILE APPENDER -->
+    <appender name="INJECTOR" class="org.apache.flume.clients.log4jappender.Log4jAppender">
+        <param name="Port" value="20001" />
+        <!--<param name="Hostname" value="ubuntu-client" />-->
+        <param name="Hostname" value="localhost" />
+
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%m%n" />
+        </layout>
+    </appender>
+
+    <root>
+        <appender-ref ref="FILE" />
+        <appender-ref ref="INJECTOR" />
+    </root>
+
+</log4j:configuration>
