@@ -7,7 +7,7 @@
     <appender name="FILE" class="org.apache.flume.clients.log4jappender.Log4jAppender">
         <param name="Port" value="20001" />
         <!--<param name="Hostname" value="ubuntu-client" />-->
-        <param name="Hostname" value="localhost" />
+        <param name="Hostname" value="127.0.0.1" />
 
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%m%n" />
@@ -20,16 +20,32 @@
     <appender name="INJECTOR" class="org.apache.flume.clients.log4jappender.Log4jAppender">
         <param name="Port" value="20001" />
         <!--<param name="Hostname" value="ubuntu-client" />-->
-        <param name="Hostname" value="localhost" />
+        <param name="Hostname" value="127.0.0.1" />
 
         <layout class="org.apache.log4j.PatternLayout">
             <param name="ConversionPattern" value="%m%n" />
         </layout>
     </appender>
 
+    <appender name="console" class="org.apache.log4j.ConsoleAppender">
+        <layout class="org.apache.log4j.PatternLayout">
+            <param name="ConversionPattern" value="%-5p %c{1} - %m%n" />
+        </layout>
+    </appender>
+
     <root>
-        <appender-ref ref="FILE" />
-        <appender-ref ref="INJECTOR" />
+        <appender-ref ref="console" />
     </root>
+
+
+    <logger name="FILE">
+        <appender-ref ref="FILE" />
+    </logger>
+
+
+    <logger name="INJECTOR">
+        <appender-ref ref="INJECTOR" />
+    </logger>
+
 
 </log4j:configuration>

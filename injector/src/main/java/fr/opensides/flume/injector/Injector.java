@@ -12,7 +12,7 @@ import java.io.*;
  */
 public class Injector {
     static final Logger LOGGER = LoggerFactory.getLogger("FILE");
-    static final Logger LOGGER_INJECTOR = LoggerFactory.getLogger("INJECTOR");
+//    static final Logger LOGGER_INJECTOR = LoggerFactory.getLogger("INJECTOR");
 
     public static void main(String... args) throws IOException, InterruptedException {
         Type type = checkParameters(args);
@@ -41,7 +41,8 @@ public class Injector {
         while ((line = br.readLine()) != null) {
             switch (type) {
                 case INJECT:
-                    LOGGER_INJECTOR.info(line);
+                    LOGGER.info(line);
+//                    LOGGER_INJECTOR.info(line);
                     break;
                 case FILE:
                     if (line.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.*$")) {

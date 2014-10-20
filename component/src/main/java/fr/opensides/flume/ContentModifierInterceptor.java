@@ -35,6 +35,8 @@ public class ContentModifierInterceptor implements Interceptor {
         String newBody = body.replaceAll("\\|", ";");
         event.setBody(newBody.getBytes());
 
+        System.out.println("======== intercept: " + new String(event.getBody()));
+
         // Let the enriched event go
         return event;
     }

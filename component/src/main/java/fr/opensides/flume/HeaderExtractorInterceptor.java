@@ -55,6 +55,8 @@ public class HeaderExtractorInterceptor implements Interceptor {
         headers.put("file", headersToFill[9]);
         headers.put("payload", log[1]);
 
+        System.out.println("======== headerExtractor: " + headers.toString());
+
         // Let the enriched event go
         return event;
     }
