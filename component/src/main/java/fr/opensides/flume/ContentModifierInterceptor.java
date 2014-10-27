@@ -2,14 +2,13 @@ package fr.opensides.flume;
 
 import org.apache.flume.Context;
 import org.apache.flume.Event;
-import org.apache.flume.FlumeException;
 import org.apache.flume.interceptor.Interceptor;
+import org.joda.time.DateTime;
+import org.joda.time.DateTimeZone;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
-import java.util.Map;
 
 /**
  * User: khanh
@@ -18,7 +17,7 @@ import java.util.Map;
 public class ContentModifierInterceptor implements Interceptor {
 
 
-    public ContentModifierInterceptor(){
+    public ContentModifierInterceptor() {
     }
 
     @Override
@@ -33,9 +32,24 @@ public class ContentModifierInterceptor implements Interceptor {
         String body = new String(event.getBody());
 
         String newBody = body.replaceAll("\\|", ";");
+
+        //TODO : hack pour le timestamp : on le recupere du header et on le force dans le body
+        //TODO : on considere que le timestamp est toujours le premier champ
+        String timestamp = event.getHeaders().get("timestamp");
+        if (timestamp == null) {
+            System.out.println("log non standard: unable to parse: " + body);
+        } else {
+            int commaIndex = newBody.indexOf(";");
+
+            Calendar cal = Calendar.getInstance();
+            cal.setTimeInMillis(Long.valueOf(timestamp));
+
+            newBody = cal.getTime() + newBody.substring(commaIndex);
+        }
+
         event.setBody(newBody.getBytes());
 
-        System.out.println("======== intercept: " + new String(event.getBody()));
+        System.out.println(event.getHeaders());
 
         // Let the enriched event go
         return event;
