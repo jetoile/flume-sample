@@ -5,7 +5,7 @@
 
     <!-- CONSOLE APPENDER -->
     <appender name="FILE" class="org.apache.flume.clients.log4jappender.Log4jAppender">
-        <param name="Port" value="20001" />
+        <param name="Port" value="20002" />
         <!--<param name="Hostname" value="ubuntu-client" />-->
         <param name="Hostname" value="127.0.0.1" />
 

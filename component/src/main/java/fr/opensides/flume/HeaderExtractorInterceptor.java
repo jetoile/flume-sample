@@ -37,25 +37,40 @@ public class HeaderExtractorInterceptor implements Interceptor {
         // These are the event's headers
         Map<String, String> headers = event.getHeaders();
 
-        DateTime d = DateTime.parse(headersToFill[0]);
-        long timestampMs = d.toDate().getTime();
-        headers.put("timestamp", String.valueOf(timestampMs));
+        // cas ou on est dans le format log standardise
+        if (headersToFill.length == 11) {
+            DateTime d = DateTime.parse(headersToFill[0]);
+            long timestampMs = d.toDate().getTime();
+            headers.put("timestamp", String.valueOf(timestampMs));
 
 
-        headers.put("id_noee", headersToFill[1]);
-        headers.put("id_correction", headersToFill[2]);
+            headers.put("id_noee", headersToFill[1]);
+            headers.put("id_correction", headersToFill[2]);
 
-        headers.put("hostname", headersToFill[3]);
+            headers.put("hostname", headersToFill[3]);
 
-        headers.put("application", headersToFill[4]);
-        headers.put("app-specific", headersToFill[5]);
-        headers.put("version", headersToFill[6]);
-        headers.put("level", headersToFill[7]);
-        headers.put("class", headersToFill[8]);
-        headers.put("file", headersToFill[9]);
-        headers.put("payload", log[1]);
+            headers.put("application", headersToFill[4]);
+            headers.put("app-specific", headersToFill[5]);
+            headers.put("version", headersToFill[6]);
+            headers.put("level", headersToFill[7]);
+            headers.put("class", headersToFill[8]);
+            headers.put("file", headersToFill[9]);
+            headers.put("payload", log[1]);
+        } else {
+            headers.put("payload", log[0]);
+        }
 
-        System.out.println("======== headerExtractor: " + headers.toString());
+
+        //TODO :get header fields.flume.client.log4j.timestamp to "hack" the display
+        System.out.println("*** " + event.getHeaders());
+
+        String timestamp = event.getHeaders().get("flume.client.log4j.timestamp");
+        System.out.println("*** => " + timestamp);
+        if (timestamp != null) {
+            headers.put("timestamp", timestamp);
+        } else {
+            System.out.println("log non standard: unable to parse: " + body);
+        }
 
         // Let the enriched event go
         return event;
