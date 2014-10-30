@@ -38,7 +38,7 @@ public class HeaderExtractorInterceptor implements Interceptor {
         Map<String, String> headers = event.getHeaders();
 
         // cas ou on est dans le format log standardise
-        if (headersToFill.length == 11) {
+        if (headersToFill.length == 10) {
             DateTime d = DateTime.parse(headersToFill[0]);
             long timestampMs = d.toDate().getTime();
             headers.put("timestamp", String.valueOf(timestampMs));
