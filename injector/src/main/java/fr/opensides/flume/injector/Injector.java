@@ -4,6 +4,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import java.io.*;
+import java.util.concurrent.ThreadLocalRandom;
 
 
 /**
@@ -38,10 +39,19 @@ public class Injector {
         }
 
         String line;
+
+        ThreadLocalRandom tlr = ThreadLocalRandom.current();
+
         while ((line = br.readLine()) != null) {
-            Thread.sleep(500);
+
+            long randomMillis = tlr.nextLong(1000);
+            Thread.sleep(randomMillis);
+
             switch (type) {
                 case INJECT:
+                    if (tlr.nextBoolean() && tlr.nextBoolean()) {
+                        line = "2014-10-08T14:15:30-07:00;" + randomMillis + ";session-id-" + randomMillis + ";1.0;DSL380-29S;NOEE2;;FATAL;q.f.MonException;error.log|Illegal Argument Exception";
+                    }
                     LOGGER_INJECTOR.info(line);
                     break;
                 case FILE:
