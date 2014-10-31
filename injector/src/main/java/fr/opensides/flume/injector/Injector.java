@@ -30,42 +30,60 @@ public class Injector {
                     System.exit(-1);
                 }
 
-                br = new BufferedReader(new FileReader(file));
+                readAndLogLegacyFileLog(args[1]);
                 break;
             case INJECT:
-                InputStream inputStream = Injector.class.getClassLoader().getResourceAsStream("log.sample.txt");
-                br = new BufferedReader(new InputStreamReader(inputStream));
+                readAndLogSpecFileLog("log.sample.txt");
                 break;
         }
+    }
 
+    public static void readAndLogLegacyFileLog(String fileName) throws IOException, InterruptedException {
+        File file = new File(fileName);
         String line;
 
         ThreadLocalRandom tlr = ThreadLocalRandom.current();
 
-        while ((line = br.readLine()) != null) {
+        try (BufferedReader br = new BufferedReader(new FileReader(file));) {
 
-            long randomMillis = tlr.nextLong(1000);
-            Thread.sleep(randomMillis);
+            while ((line = br.readLine()) != null) {
+                long randomMillis = tlr.nextLong(1000);
+                Thread.sleep(randomMillis);
 
-            switch (type) {
-                case INJECT:
-                    if (tlr.nextBoolean() && tlr.nextBoolean()) {
-                        line = "2014-10-08T14:15:30-07:00;" + randomMillis + ";session-id-" + randomMillis + ";1.0;DSL380-29S;NOEE2;;FATAL;q.f.MonException;error.log|Illegal Argument Exception";
-                    }
-                    LOGGER_INJECTOR.info(line);
-                    break;
-                case FILE:
-                    if (line.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.*$")) {
-                        int index_comma = line.indexOf(",");
-                        String date = line.substring(0, index_comma);
-                        String content = line.substring(index_comma + 1);
-                        LOGGER.info(date + "|" + content);
-                    }
-                    break;
-
+                if (line.matches("^\\d{4}-\\d{2}-\\d{2} \\d{2}:\\d{2}:\\d{2}.*$")) {
+                    int index_comma = line.indexOf(",");
+                    String date = line.substring(0, index_comma);
+                    String content = line.substring(index_comma + 1);
+                    LOGGER.info(date + "|" + content);
+                }
             }
         }
 
+    }
+
+    public static void readAndLogSpecFileLog(String fileName) throws IOException, InterruptedException {
+        String line;
+
+        ThreadLocalRandom tlr = ThreadLocalRandom.current();
+        while (true) {
+            try (InputStream inputStream = Injector.class.getClassLoader().getResourceAsStream("log.sample.txt");) {
+
+                try (BufferedReader br = new BufferedReader(new InputStreamReader(inputStream));) {
+
+                    while ((line = br.readLine()) != null) {
+                        long randomMillis = tlr.nextLong(1000);
+                        Thread.sleep(randomMillis);
+
+                        if (tlr.nextBoolean() && tlr.nextBoolean()) {
+                            line = "2014-10-08T14:15:30-07:00;" + randomMillis + ";session-id-" + randomMillis + ";DSL380-29S;NOEE2;;1.0;FATAL;q.f.MonException;error.log|Illegal Argument Exception";
+                        }
+                        LOGGER_INJECTOR.info(line);
+                    }
+
+                    br.close();
+                }
+            }
+        }
 
     }
 

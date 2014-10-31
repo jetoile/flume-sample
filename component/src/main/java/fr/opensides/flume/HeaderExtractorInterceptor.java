@@ -57,7 +57,7 @@ public class HeaderExtractorInterceptor implements Interceptor {
             headers.put("file", headersToFill[9]);
             headers.put("payload", log[1]);
         } else {
-            headers.put("payload", log[0]);
+            headers.put("payload", log[1]);
         }
 
 
